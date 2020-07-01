@@ -1,0 +1,24 @@
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo $script_dir
+pushd $script_dir
+extensions=$(sed -e '/^[ \t]*\/\//d' devcontainer.json | jq '.extensions[]' | xargs)
+popd
+
+# make extensions arguments
+extensions_arg_str=
+for i in $extensions;  do
+    extensions_arg_str="$extensions_arg_str --install-extension $i"
+done
+
+pushd /root/.vscode-server/bin
+
+server_sh=$(find ./ -name server.sh)
+export VSCODE_AGENT_FOLDER=/root/.vscode-server
+./$server_sh \
+--extensions-download-dir /root/.vscode-server/extensionsCache \
+$extensions_arg_str \
+--force
+
+popd

@@ -1,0 +1,27 @@
+FROM python
+
+ARG PROXY="http://web-proxy.am.softwaregrp.net:8080"
+
+ENV HTTP_PROXY $PROXY
+ENV HTTPS_PROXY $PROXY
+ENV http_proxy $PROXY
+ENV https_proxy $PROXY
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+#ARG USERNAME=vscode
+#ARG USER_UID=1000
+#ARG USER_GID=$USER_UID
+
+
+RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
+    && echo "Acquire::http::proxy \"$PROXY\";" > /etc/apt/apt.conf \ 
+    && echo "Acquire::https::proxy \"$PROXY\";" >> /etc/apt/apt.conf \ 
+    && apt-get update && apt-get install -y apt-utils && apt-get install -y jq
+
+# Install python packages
+COPY ./requirements*.txt /
+RUN pip install --no-cache-dir -r /requirements-dev.txt
+
+# Switch back to dialog for any ad-hoc use of apt-get
+ENV DEBIAN_FRONTEND=
