@@ -19,8 +19,10 @@
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-python.python",
-		"littlefoxteam.vscode-python-test-adapter",
-		"njpwerner.autodocstring"
+		"njpwerner.autodocstring",
+		"formulahendry.code-runner",
+		"shardulm94.trailing-spaces",
+		"christian-kohler.path-intellisense"
 	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
