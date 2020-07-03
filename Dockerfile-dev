@@ -21,7 +21,8 @@ RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
 
 # Install python packages
 COPY ./requirements*.txt /
-RUN pip install --no-cache-dir -r /requirements-dev.txt
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r /requirements-dev.txt
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
