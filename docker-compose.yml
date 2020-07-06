@@ -1,0 +1,10 @@
+version: '3'
+services:
+  py-dev-env:
+    image: py-dev-env:latest
+    build:
+        context: .
+        dockerfile: Dockerfile-dev
+    container_name: PyDevEnv
+    volumes:
+        - "./:/workspaces/py-dev-demo"
