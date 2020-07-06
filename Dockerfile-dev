@@ -1,6 +1,6 @@
 FROM python
 
-ARG PROXY="http://web-proxy.am.softwaregrp.net:8080"
+ARG PROXY="http://web-proxy.ap.softwaregrp.net:8080"
 
 ENV HTTP_PROXY $PROXY
 ENV HTTPS_PROXY $PROXY
@@ -24,7 +24,11 @@ COPY ./requirements*.txt /
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r /requirements-dev.txt
 
+# Install vscode server
+RUN curl -fsSL https://code-server.dev/install.sh | sh 
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
-CMD ["tail", "-f"]
+CMD tail -f
+

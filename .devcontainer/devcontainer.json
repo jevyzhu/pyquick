@@ -9,5 +9,7 @@
 	"settings": {
 		"terminal.integrated.shell.linux": null
 	},
-	"extensions": []
+	"extensions": [
+		"ms-python.python"
+	]
 }
