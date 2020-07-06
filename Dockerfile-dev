@@ -1,4 +1,4 @@
-FROM python
+FROM python:3.8
 
 ARG PROXY="http://web-proxy.ap.softwaregrp.net:8080"
 
@@ -8,10 +8,6 @@ ENV http_proxy $PROXY
 ENV https_proxy $PROXY
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-#ARG USERNAME=vscode
-#ARG USER_UID=1000
-#ARG USER_GID=$USER_UID
 
 
 RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \

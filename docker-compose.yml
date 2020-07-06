@@ -7,4 +7,4 @@ services:
         dockerfile: Dockerfile-dev
     container_name: PyDevEnv
     volumes:
-        - "./:/workspaces/py-dev-demo"
+        - "./:/workspace/py-dev-demo"

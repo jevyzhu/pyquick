@@ -10,6 +10,7 @@
 		"terminal.integrated.shell.linux": null
 	},
 	"extensions": [
-		"ms-python.python"
+		"ms-python.python",
+		"ms-azuretools.vscode-docker"
 	]
 }
