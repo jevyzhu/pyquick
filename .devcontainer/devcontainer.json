@@ -1,6 +1,5 @@
 {
 	"name": "py-demo-vscode",
-	"context": "..",
 	"dockerComposeFile": [
 		"../docker-compose.yml"
 	],

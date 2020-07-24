@@ -12,10 +12,10 @@ for i in $extensions;  do
     extensions_arg_str="$extensions_arg_str --install-extension $i"
 done
 
-pushd /root/.vscode-server/bin
+pushd $HOME/.vscode-server/bin
 
 server_sh=$(find ./ -name server.sh)
-export VSCODE_AGENT_FOLDER=/root/.vscode-server
+export VSCODE_AGENT_FOLDER=$HOME/.vscode-server
 ./$server_sh \
 --extensions-download-dir /root/.vscode-server/extensionsCache \
 $extensions_arg_str \
