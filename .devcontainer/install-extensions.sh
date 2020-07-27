@@ -17,7 +17,7 @@ pushd $HOME/.vscode-server/bin
 server_sh=$(find ./ -name server.sh)
 export VSCODE_AGENT_FOLDER=$HOME/.vscode-server
 ./$server_sh \
---extensions-download-dir /root/.vscode-server/extensionsCache \
+--extensions-download-dir $HOME/.vscode-server/extensionsCache \
 $extensions_arg_str \
 --force
 
