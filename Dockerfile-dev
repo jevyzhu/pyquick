@@ -12,18 +12,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
     && echo "Acquire::http::proxy \"$PROXY\";" > /etc/apt/apt.conf \ 
     && echo "Acquire::https::proxy \"$PROXY\";" >> /etc/apt/apt.conf \ 
-    && apt-get update && apt-get install -y apt-utils && apt-get install -y jq
-
-# Switch back to dialog for any ad-hoc use of apt-get
-ENV DEBIAN_FRONTEND=
+    && apt-get update && apt-get install -y sudo jq
 
 # Install python packages
 COPY ./requirements*.txt /
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r /requirements-dev.txt
-
-# Install vscode server
-RUN curl -fsSL https://code-server.dev/install.sh | sh 
 
 # User to run container
 ARG USER_ID
@@ -31,17 +25,19 @@ ARG GROUP_ID
 ARG USER=hacker
 RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
     groupadd -g ${GROUP_ID} ${USER} &&\
-    useradd -l -u ${USER_ID} -g ${USER} ${USER}  &&\
-    install -d -m 0755 -o ${USER} -g ${USER} /home/${USER} &&\
+    useradd -m -l -u ${USER_ID} -g ${USER} ${USER}  &&\
     usermod --shell /bin/bash ${USER} &&\
     usermod -a -G root ${USER} &&\
-    chown  --recursive  ${USER}:${USER} / > /dev/null 2>&1 ||:  &&\
     echo "${USER}:${USER}" |  chpasswd &&\
-    echo 'export PS1="\u@ \[\e[32m\]\w\[\e[m\]\[\e[35m\]\[\e[m\]\\n$"' >> /home/${USER}/.bashrc
+    echo 'export PS1="\u@ \[\e[32m\]\w\[\e[m\]\[\e[35m\]\[\e[m\]\\n$"' \
+        >> /home/${USER}/.bashrc &&\
+    echo $USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER  &&\
+    chmod 0440 /etc/sudoers.d/$USER  \
 ;fi
 USER ${USER}
 
+# Switch back to dialog for any ad-hoc use of apt-get
+ENV DEBIAN_FRONTEND=
 
 # Keep container live
-CMD tail -f
-
+CMD tail -f /dev/null

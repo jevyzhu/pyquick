@@ -5,6 +5,9 @@ services:
     build:
         context: .
         dockerfile: Dockerfile-dev
+        args:
+            USER_ID: $user_id
+            GROUP_ID: $group_id
     container_name: PyDevEnv
     volumes:
         - "./:/workspace/py-dev-demo"
