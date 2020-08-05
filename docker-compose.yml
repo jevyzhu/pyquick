@@ -1,13 +1,25 @@
-version: '3'
+version: '3.8'
 services:
-  py-dev-env:
-    image: py-dev-env:latest
+  pyquick-dev-env-srv:
+    image: ${CURRENT_PROJECT}-devenv:latest
     build:
         context: .
         dockerfile: Dockerfile-dev
         args:
-            USER_ID: $user_id
-            GROUP_ID: $group_id
-    container_name: PyDevEnv
+            USER_ID: $CURRENT_USER_ID
+            GROUP_ID: $CURRENT_GROUP_ID
+            DEV_USER: $DEV_USER
+    container_name: ${CURRENT_PROJECT}-devenv
     volumes:
-        - "./:/workspace/py-dev-demo"
+        - "./:/home/${DEV_USER}/${CURRENT_PROJECT}"
+
+  pyquick-prod-env-srv:
+    image: ${CURRENT_PROJECT}-prod:latest
+    build:
+        context: .
+        dockerfile: Dockerfile
+        args:
+            USER_ID: $CURRENT_USER_ID
+            GROUP_ID: $CURRENT_GROUP_ID
+            PROD_USER: $PROD_USER
+    container_name: ${CURRENT_PROJECT}-prod

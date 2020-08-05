@@ -1,7 +1,6 @@
-FROM python:3.8
+FROM python:slim-buster
 
 ARG PROXY="http://web-proxy.ap.softwaregrp.net:8080"
-
 ENV HTTP_PROXY $PROXY
 ENV HTTPS_PROXY $PROXY
 ENV http_proxy $PROXY
@@ -12,32 +11,39 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
     && echo "Acquire::http::proxy \"$PROXY\";" > /etc/apt/apt.conf \ 
     && echo "Acquire::https::proxy \"$PROXY\";" >> /etc/apt/apt.conf \ 
-    && apt-get update && apt-get install -y sudo jq
-
-# Install python packages
-COPY ./requirements*.txt /
-RUN pip install --upgrade pip \
-    && pip install --no-cache-dir -r /requirements-dev.txt
-
-# User to run container
-ARG USER_ID
-ARG GROUP_ID
-ARG USER=hacker
-RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
-    groupadd -g ${GROUP_ID} ${USER} &&\
-    useradd -m -l -u ${USER_ID} -g ${USER} ${USER}  &&\
-    usermod --shell /bin/bash ${USER} &&\
-    usermod -a -G root ${USER} &&\
-    echo "${USER}:${USER}" |  chpasswd &&\
-    echo 'export PS1="\u@ \[\e[32m\]\w\[\e[m\]\[\e[35m\]\[\e[m\]\\n$"' \
-        >> /home/${USER}/.bashrc &&\
-    echo $USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER  &&\
-    chmod 0440 /etc/sudoers.d/$USER  \
-;fi
-USER ${USER}
+    && apt-get update && apt-get install -y sudo
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
+# Install python packages
+COPY ./requirements*.txt /
+RUN pip install -U --no-cache-dir -r /requirements-dev.txt &&\
+    pip install -U --upgrade pip
+
+# User to run container
+ARG USER_ID
+ARG GROUP_ID
+ARG DEV_USER
+RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
+    groupadd -g ${GROUP_ID} ${DEV_USER} &&\
+    useradd -m -l -u ${USER_ID} -g ${DEV_USER} ${DEV_USER}  &&\
+    usermod --shell /bin/bash ${DEV_USER} &&\
+    usermod -a -G root ${DEV_USER} &&\
+    echo "${DEV_USER}:${DEV_USER}" |  chpasswd &&\
+    echo 'export PS1="\u@ \[\e[32m\]\w\[\e[m\]\[\e[35m\]\[\e[m\]\\n$ "' \
+        >> /home/${DEV_USER}/.bashrc &&\
+    echo $DEV_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEV_USER  &&\
+    chmod 0440 /etc/sudoers.d/$DEV_USER  &&\
+    chown --changes --silent --no-dereference --recursive \
+          ${USER_ID}:${GROUP_ID} / \
+          > /dev/null 2>&1 ||:  \
+;fi
+USER ${DEV_USER}
+WORKDIR /home/${DEV_USER}
+
+# Special environment for ad-hoc use
+ENV IN_DEV_DOCKER=1
+
 # Keep container live
-CMD tail -f /dev/null
+CMD tail -f
