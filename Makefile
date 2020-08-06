@@ -1,8 +1,8 @@
 #!/usr/bin/make
 PROJECT := pyquick
 DEV_CONTAINER := ${PROJECT}-devenv
-DEV_USER := me
-PROD_USER := me
+DEV_USER := dev
+PROD_USER := ops
 
 SHELL = /bin/bash
 

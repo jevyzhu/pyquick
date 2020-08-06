@@ -6,9 +6,9 @@ services:
         context: .
         dockerfile: Dockerfile-dev
         args:
+            USER_NAME: $DEV_USER
             USER_ID: $CURRENT_USER_ID
             GROUP_ID: $CURRENT_GROUP_ID
-            DEV_USER: $DEV_USER
             PROXY: $HTTP_PROXY
     container_name: ${CURRENT_PROJECT}-devenv
     volumes:
@@ -20,7 +20,7 @@ services:
         context: .
         dockerfile: Dockerfile
         args:
+            USER_NAME: $PROD_USER
             USER_ID: $CURRENT_USER_ID
             GROUP_ID: $CURRENT_GROUP_ID
-            PROD_USER: $PROD_USER
             PROXY: $HTTP_PROXY

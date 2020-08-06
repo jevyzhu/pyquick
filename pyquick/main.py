@@ -6,7 +6,7 @@ def arg_parser():
     return parser
 
 def main():
-    print('hi, quick!')
+    print('I like 955!')
     args = arg_parser().parse_args()
 
 if __name__ == '__main__':

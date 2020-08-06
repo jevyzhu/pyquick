@@ -22,25 +22,26 @@ RUN pip install -U --no-cache-dir -r /requirements-dev.txt &&\
     pip install -U --upgrade pip
 
 # User to run container
+ARG USER_NAME
 ARG USER_ID
 ARG GROUP_ID
-ARG DEV_USER
-RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
-    groupadd -g ${GROUP_ID} ${DEV_USER} &&\
-    useradd -m -l -u ${USER_ID} -g ${DEV_USER} ${DEV_USER}  &&\
-    usermod --shell /bin/bash ${DEV_USER} &&\
-    usermod -a -G root ${DEV_USER} &&\
-    echo "${DEV_USER}:${DEV_USER}" |  chpasswd &&\
+RUN if [ ! "${USER_NAME}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
+    if id "${USER_NAME}" >/dev/null 2>&1; then \
+        userdel -r -f ${USER_NAME} \
+    ;fi &&\
+    groupadd -f -g ${GROUP_ID} ${USER_NAME} &&\
+    useradd -m -l -u ${USER_ID} -g ${USER_NAME} ${USER_NAME}  &&\
+    usermod --shell /bin/bash ${USER_NAME} &&\
+    usermod -a -G root ${USER_NAME} &&\
+    echo "${USER_NAME}:${USER_NAME}" |  chpasswd &&\
     echo 'export PS1="\u@ \[\e[32m\]\w\[\e[m\]\[\e[35m\]\[\e[m\]\\n$ "' \
-        >> /home/${DEV_USER}/.bashrc &&\
-    echo $DEV_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEV_USER  &&\
-    chmod 0440 /etc/sudoers.d/$DEV_USER  &&\
-    chown --changes --silent --no-dereference --recursive \
-          ${USER_ID}:${GROUP_ID} / \
-          > /dev/null 2>&1 ||:  \
+        >> /home/${USER_NAME}/.bashrc &&\
+    echo $USER_NAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER_NAME  &&\
+    chmod 0440 /etc/sudoers.d/$USER_NAME  &&\
+    chown -R ${USER_ID}:${GROUP_ID} /  > /dev/null 2>&1 ||:  \
 ;fi
-USER ${DEV_USER}
-WORKDIR /home/${DEV_USER}
+USER ${USER_NAME}
+WORKDIR /home/${USER}
 
 # Special environment for ad-hoc use
 ENV IN_DEV_DOCKER=1

@@ -28,24 +28,24 @@ RUN cd /src &&\
     python ./setup.py install
 
 # User to run container
+ARG USER_NAME
 ARG USER_ID
 ARG GROUP_ID
-ARG PROD_USER
-RUN if [ ! "${PROD_USER}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
-    if id "${PROD_USER}" >/dev/null 2>&1; then \
-        userdel -r -f ${PROD_USER} \
+RUN if [ ! "${USER_NAME}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
+    if id "${USER_NAME}" >/dev/null 2>&1; then \
+        userdel -r -f ${USER_NAME} \
     ;fi &&\
-    groupadd -f -g ${GROUP_ID} ${PROD_USER} &&\
-    useradd -m -l -u ${USER_ID} -g ${PROD_USER} ${PROD_USER}  &&\
-    usermod --shell /bin/bash ${PROD_USER} &&\
-    usermod -a -G root ${PROD_USER} &&\
-    echo "${PROD_USER}:${PROD_USER}" |  chpasswd &&\
+    groupadd -f -g ${GROUP_ID} ${USER_NAME} &&\
+    useradd -m -l -u ${USER_ID} -g ${USER_NAME} ${USER_NAME}  &&\
+    usermod --shell /bin/bash ${USER_NAME} &&\
+    usermod -a -G root ${USER_NAME} &&\
+    echo "${USER_NAME}:${USER_NAME}" |  chpasswd &&\
     echo 'export PS1="\u@ \[\e[32m\]\w\[\e[m\]\[\e[35m\]\[\e[m\]\\n$ "' \
-        >> /home/${PROD_USER}/.bashrc &&\
-    echo $PROD_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$PROD_USER  &&\
-    chmod 0440 /etc/sudoers.d/$PROD_USER  &&\
+        >> /home/${USER_NAME}/.bashrc &&\
+    echo $USER_NAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER_NAME  &&\
+    chmod 0440 /etc/sudoers.d/$USER_NAME  &&\
     chown -R ${USER_ID}:${GROUP_ID} /  > /dev/null 2>&1 ||:  \
 ;fi
-USER ${PROD_USER}
+USER ${USER_NAME}
 
 ENTRYPOINT ["pyquick"]
