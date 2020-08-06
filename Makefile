@@ -41,7 +41,7 @@ dist: clean test
 		python setup.py bdist_wheel \
 	;fi
 
-test: 
+test:
 	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
 		$(dev-docker) &&\
 		docker exec -w /home/${DEV_USER}/${PROJECT} ${DEV_CONTAINER} \
@@ -73,7 +73,7 @@ docker-dev:
 docker:
 	$(prod-docker)
 
-docker-slim: docker
+docker-slim:
 	docker-slim build  ${PROJECT}-prod:${TAG} --tag=${PROJECT}-prod:${TAG} --http-probe=false  --include-path=/usr/local/lib/python3.8
 
 run:
