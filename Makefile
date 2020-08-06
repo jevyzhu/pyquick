@@ -16,6 +16,7 @@ define dev-docker =
 	CURRENT_GROUP_ID=${CURRENT_GROUP_ID} \
 	CURRENT_PROJECT=${PROJECT} \
 	DEV_USER=${DEV_USER} \
+	PROD_USER=${PROD_USER} \
 	docker-compose up -d --build ${PROJECT}-dev-env-srv
 endef
 
@@ -23,8 +24,10 @@ define prod-docker =
 	env CURRENT_USER_ID=${CURRENT_USER_ID} \
 	CURRENT_GROUP_ID=${CURRENT_GROUP_ID} \
 	CURRENT_PROJECT=${PROJECT} \
+	DEV_USER=${DEV_USER} \
 	PROD_USER=${PROD_USER} \
-	docker-compose build ${PROJECT}-prod-env-srv
+	docker-compose up -d --build ${PROJECT}-prod-env-srv
+
 endef
 
 dist: clean test
@@ -38,7 +41,7 @@ dist: clean test
 	;fi
 
 test: 
-	if [[ -z "${IN_DEV_DOCKER}" ]]; then \
+	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
 		$(dev-docker) &&\
 		docker exec -w /home/${DEV_USER}/${PROJECT} ${DEV_CONTAINER} \
 		pytest \
@@ -55,7 +58,7 @@ test:
 	;fi
 
 dist-upload:
-	if [[ -z "${IN_DEV_DOCKER}" ]]; then \
+	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
 		$(dev-docker) &&\
 		docker exec -it -w /home/${DEV_USER}/${PROJECT} ${DEV_CONTAINER}  \
 			twine upload dist/* \
@@ -78,5 +81,7 @@ run: docker
 
 clean:
 	find . -name '*.py[co]' -delete
-	rm -rf dist 
+	rm -fr dist 
 	rm -fr build
+	rm -fr *egg*info*
+	rm -fr coverage*

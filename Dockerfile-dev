@@ -1,6 +1,6 @@
 FROM python:slim-buster
 
-ARG PROXY="http://web-proxy.ap.softwaregrp.net:8080"
+ARG PROXY
 ENV HTTP_PROXY $PROXY
 ENV HTTPS_PROXY $PROXY
 ENV http_proxy $PROXY

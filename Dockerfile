@@ -1,6 +1,6 @@
 FROM python:slim-buster
 
-ARG PROXY="http://web-proxy.ap.softwaregrp.net:8080"
+ARG PROXY
 ENV HTTP_PROXY $PROXY
 ENV HTTPS_PROXY $PROXY
 ENV http_proxy $PROXY
@@ -17,7 +17,11 @@ RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
 ENV DEBIAN_FRONTEND=
 
 # Install python packages
-COPY . /src
+COPY ./*.py /src/
+COPY ./requirements* /src/
+COPY ./pyquick /src/pyquick
+COPY ./LICENSE /src/
+COPY ./README.md /src/
 RUN cd /src &&\ 
     pip install -U --no-cache-dir -r ./requirements.txt &&\
     pip install -U --upgrade pip &&\
