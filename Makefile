@@ -3,13 +3,14 @@ PROJECT := pyquick
 DEV_CONTAINER := ${PROJECT}-devenv
 DEV_USER := dev
 PROD_USER := ops
+TAG := latest
 
 SHELL = /bin/bash
 
 CURRENT_USER_ID := $(shell id -u ${USER}) 
 CURRENT_GROUP_ID := $(shell id -g ${USER}) 
 
-.PHONY: clean test dist dist-upload docker-dev docker run
+.PHONY: clean test dist dist-upload docker-dev docker docker-slim run
 
 define dev-docker =
 	env CURRENT_USER_ID=${CURRENT_USER_ID} \
@@ -72,7 +73,10 @@ docker-dev:
 docker:
 	$(prod-docker)
 
-run: docker
+docker-slim: docker
+	docker-slim build  ${PROJECT}-prod:${TAG} --tag=${PROJECT}-prod:${TAG} --http-probe=false  --include-path=/usr/local/lib/python3.8
+
+run:
 	@echo
 	@echo
 	@echo "================ RUN ==================="

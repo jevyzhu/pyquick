@@ -24,3 +24,4 @@ services:
             USER_ID: $CURRENT_USER_ID
             GROUP_ID: $CURRENT_GROUP_ID
             PROXY: $HTTP_PROXY
+    container_name: ${CURRENT_PROJECT}-prodenv
