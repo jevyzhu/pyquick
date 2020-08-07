@@ -16,11 +16,6 @@ RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
-# Install python packages
-COPY ./requirements*.txt /
-RUN pip install -U --no-cache-dir -r /requirements-dev.txt &&\
-    pip install -U --upgrade pip
-
 # User to run container
 ARG USER_NAME
 ARG USER_ID
@@ -42,6 +37,12 @@ RUN if [ ! "${USER_NAME}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:
 ;fi
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
+
+# Install python packages
+COPY ./requirements*.txt /tmp/
+RUN pip install -U --no-cache-dir -r ./tmp/requirements-dev.txt &&\
+    pip install -U --upgrade pip &&\
+    rm -fr /tmp/requirements*.txt
 
 # Special environment for ad-hoc use
 ENV IN_DEV_DOCKER=1
