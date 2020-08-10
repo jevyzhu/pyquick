@@ -7,8 +7,6 @@
 * docker
 * docker-compose
 
-**No need to install python!**
-
 # Quick Start
 
 ## Test
