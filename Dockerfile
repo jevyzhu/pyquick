@@ -16,17 +16,6 @@ RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
-# Install python packages
-COPY ./*.py /src/
-COPY ./requirements* /src/
-COPY ./pyquick /src/pyquick
-COPY ./LICENSE /src/
-COPY ./README.md /src/
-RUN cd /src &&\ 
-    pip install -U --no-cache-dir -r ./requirements.txt &&\
-    pip install -U --upgrade pip &&\
-    python ./setup.py install
-
 # User to run container
 ARG USER_NAME
 ARG USER_ID
@@ -43,9 +32,22 @@ RUN if [ ! "${USER_NAME}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:
     echo 'export PS1="\u@ \[\e[32m\]\w\[\e[m\]\[\e[35m\]\[\e[m\]\\n$ "' \
         >> /home/${USER_NAME}/.bashrc &&\
     echo $USER_NAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER_NAME  &&\
-    chmod 0440 /etc/sudoers.d/$USER_NAME  &&\
-    chown -R ${USER_ID}:${GROUP_ID} /  > /dev/null 2>&1 ||:  \
+    chmod 0440 /etc/sudoers.d/$USER_NAME \
+    #chown -R ${USER_ID}:${GROUP_ID} /  > /dev/null 2>&1 ||:  \
 ;fi
 USER ${USER_NAME}
+
+# Install python packages
+COPY ./*.py /tmp/src/
+COPY ./requirements* /tmp/src/
+COPY ./pyquick /tmp/src/pyquick
+COPY ./LICENSE /tmp/src/
+COPY ./README.md /tmp/src/
+RUN cd /tmp/src &&\ 
+    pip install -U --no-cache-dir -r /tmp/src/requirements.txt &&\
+    pip install -U --upgrade pip &&\
+    sudo python /tmp/src/setup.py install &&\
+    cd &&\
+    sudo rm -fr /tmp/src
 
 ENTRYPOINT ["pyquick"]
