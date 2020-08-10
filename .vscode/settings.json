@@ -5,8 +5,6 @@
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
-    "terminal.integrated.fontSize": 24,
-    "editor.fontSize": 28,
     "files.associations": {
         "Dockerfile*": "dockerfile"
     }
