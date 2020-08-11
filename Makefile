@@ -28,7 +28,6 @@ define prod-docker =
 	DEV_USER=${DEV_USER} \
 	PROD_USER=${PROD_USER} \
 	docker-compose up -d --build ${PROJECT}-prod-env-srv
-
 endef
 
 dist: clean test
@@ -58,6 +57,17 @@ test:
 			-v tests \
 	;fi
 
+run:
+	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
+		$(prod-docker) > /dev/null &&\
+		echo &&\
+		echo "============ Run In Docker ================" &&\
+		echo &&\
+		docker run ${PROJECT}-prod $(ARGS) \
+	;else \
+		python -m ${PROJECT}.main \
+	;fi
+
 dist-upload:
 	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
 		$(dev-docker) > /dev/null &&\
@@ -76,12 +86,6 @@ docker:
 docker-slim:
 	docker-slim build  ${PROJECT}-prod:${TAG} --tag=${PROJECT}-prod:${TAG} --http-probe=false  --include-path=/usr/local/lib/python3.8
 
-run: docker
-	@echo
-	@echo
-	@echo "================ RUN ==================="
-	@echo
-	@docker run ${PROJECT}-prod $(ARGS)
 
 clean:
 	find . -name '*.py[co]' -delete
