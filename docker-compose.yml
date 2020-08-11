@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 services:
   pyquick-dev-env-srv:
     image: ${CURRENT_PROJECT}-devenv:latest
