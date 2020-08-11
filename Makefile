@@ -65,7 +65,7 @@ run:
 		echo &&\
 		docker run ${PROJECT}-prod $(ARGS) \
 	;else \
-		python -m ${PROJECT}.main \
+		python -m ${PROJECT}.main $(ARGS) \
 	;fi
 
 dist-upload:
