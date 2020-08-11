@@ -33,8 +33,8 @@ endef
 
 dist: clean test
 	if [[ -z "${IN_DEV_DOCKER}" ]]; then \
-		$(dev-docker) &&\
-		docker exec -w /home/${DEV_USER}/${PROJECT} ${DEV_CONTAINER} \
+		$(dev-docker) > /dev/null &&\
+		docker exec ${DEV_CONTAINER} \
 		/bin/bash -c 'rm -rf dist/* && python setup.py sdist && python setup.py bdist_wheel' \
 	;else \
 		python setup.py sdist &&\
@@ -43,8 +43,8 @@ dist: clean test
 
 test:
 	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
-		$(dev-docker) &&\
-		docker exec -w /home/${DEV_USER}/${PROJECT} ${DEV_CONTAINER} \
+		$(dev-docker) > /dev/null &&\
+		docker exec ${DEV_CONTAINER} \
 		pytest \
 			--cov=${PROJECT} \
 			--cov-report=term \
@@ -60,8 +60,8 @@ test:
 
 dist-upload:
 	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
-		$(dev-docker) &&\
-		docker exec -it -w /home/${DEV_USER}/${PROJECT} ${DEV_CONTAINER}  \
+		$(dev-docker) > /dev/null &&\
+		docker exec -it ${DEV_CONTAINER}  \
 			twine upload dist/* \
 	;else \
 		twine upload dist/* \
@@ -76,7 +76,7 @@ docker:
 docker-slim:
 	docker-slim build  ${PROJECT}-prod:${TAG} --tag=${PROJECT}-prod:${TAG} --http-probe=false  --include-path=/usr/local/lib/python3.8
 
-run:
+run: docker
 	@echo
 	@echo
 	@echo "================ RUN ==================="

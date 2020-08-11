@@ -10,9 +10,10 @@ services:
             USER_ID: $CURRENT_USER_ID
             GROUP_ID: $CURRENT_GROUP_ID
             PROXY: $HTTP_PROXY
+            PROJECT: ${CURRENT_PROJECT}
     container_name: ${CURRENT_PROJECT}-devenv
     volumes:
-        - "./:/home/${DEV_USER}/${CURRENT_PROJECT}"
+        - "./:/workspace/${CURRENT_PROJECT}"
 
   pyquick-prod-env-srv:
     image: ${CURRENT_PROJECT}-prod:latest

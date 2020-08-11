@@ -24,6 +24,9 @@ RUN if [ ! "${USER_NAME}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:
     if id "${USER_NAME}" >/dev/null 2>&1; then \
         userdel -r -f ${USER_NAME} \
     ;fi &&\
+    if grep -q "^${USER_NAME}:" /etc/group; then \
+        groupdel ${USER_NAME} \
+    ;fi &&\
     groupadd -f -g ${GROUP_ID} ${USER_NAME} &&\
     useradd -m -l -u ${USER_ID} -g ${USER_NAME} ${USER_NAME}  &&\
     usermod --shell /bin/bash ${USER_NAME} &&\

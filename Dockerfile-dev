@@ -25,6 +25,9 @@ RUN if [ ! "${USER_NAME}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:
     if id "${USER_NAME}" >/dev/null 2>&1; then \
         userdel -r -f ${USER_NAME} \
     ;fi &&\
+    if grep -q "^${USER_NAME}:" /etc/group; then \
+        groupdel ${USER_NAME} \
+    ;fi &&\
     groupadd -f -g ${GROUP_ID} ${USER_NAME} &&\
     useradd -m -l -u ${USER_ID} -g ${USER_NAME} ${USER_NAME}  &&\
     usermod --shell /bin/bash ${USER_NAME} &&\
@@ -37,15 +40,15 @@ RUN if [ ! "${USER_NAME}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:
     #chown -R ${USER_ID}:${GROUP_ID} /  > /dev/null 2>&1 ||:  \
 ;fi
 USER ${USER_NAME}
-WORKDIR /home/${USER_NAME}
-
+ARG PROJECT
+WORKDIR /workspace/${PROJECT}
 
 # Keep container live
 CMD tail -f
 
 # Install python packages
 ENV PATH=/home/${USER_NAME}/.local/bin:$PATH
-COPY ./requirements*.txt ./
-RUN pip install -U --no-cache-dir -r ./requirements-dev.txt &&\
+COPY ./requirements*.txt /tmp/
+RUN pip install -U --no-cache-dir -r /tmp/requirements-dev.txt &&\
     pip install -U --upgrade pip &&\
-    rm -fr ./requirements*.txt
+    sudo rm -fr /tmp/requirements*.txt
