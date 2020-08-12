@@ -1,4 +1,6 @@
 #!/usr/bin/make
+
+PYTHON_VER := 3.8
 PROJECT := pyquick
 DEV_USER := dev
 DEV_CONTAINER := ${PROJECT}-devenv
@@ -6,16 +8,17 @@ DEV_SRV := ${PROJECT}-dev-env-srv
 
 PROD_USER := ops
 PROD_SRV := ${PROJECT}-prod-env-srv 
+
 TAG := latest
 PROD_IMG := ${PROJECT}-prod:${TAG} 
-PYTHON := python3.8
+PROD_IMG_SLIM := ${PROJECT}-prod-slim:${TAG} 
 
 SHELL = /bin/bash
 
 CURRENT_USER_ID := $(shell id -u ${USER}) 
 CURRENT_GROUP_ID := $(shell id -g ${USER}) 
 
-.PHONY: clean test dist dist-upload docker-dev docker docker-slim run
+.PHONY: clean test dist dist-upload docker-dev docker docker-slim run run-slim
 
 define dev-docker =
 	env CURRENT_USER_ID=${CURRENT_USER_ID} \
@@ -23,6 +26,7 @@ define dev-docker =
 	CURRENT_PROJECT=${PROJECT} \
 	DEV_USER=${DEV_USER} \
 	PROD_USER=${PROD_USER} \
+	PYTHON_VER=${PYTHON_VER} \
 	docker-compose up -d --build ${DEV_SRV}
 endef
 
@@ -32,6 +36,7 @@ define prod-docker =
 	CURRENT_PROJECT=${PROJECT} \
 	DEV_USER=${DEV_USER} \
 	PROD_USER=${PROD_USER} \
+	PYTHON_VER=${PYTHON_VER} \
 	docker-compose up -d --build ${PROD_SRV}
 endef
 
@@ -67,7 +72,17 @@ run:
 		echo &&\
 		echo "============ Run In Docker ================" &&\
 		echo &&\
-		docker run ${PROJECT}-prod $(ARGS) \
+		docker run ${PROD_IMG} $(ARGS) \
+	;else \
+		python -m ${PROJECT}.main $(ARGS) \
+	;fi
+
+run-slim:
+	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
+		echo &&\
+		echo "============ Run In Docker ================" &&\
+		echo &&\
+		docker run ${PROD_IMG_SLIM} $(ARGS) \
 	;else \
 		python -m ${PROJECT}.main $(ARGS) \
 	;fi
@@ -88,7 +103,7 @@ docker:
 	$(prod-docker)
 
 docker-slim:
-	docker-slim build  ${PROD_IMG} --tag=${PROD_IMG} --http-probe=false  --include-path=/usr/local/lib/{PYTHON}
+	docker-slim build  ${PROD_IMG} --tag=${PROD_IMG_SLIM} --http-probe=false  --include-path=/usr/local/lib/python${PYTHON_VER}
 
 
 clean:

@@ -10,6 +10,7 @@ services:
             USER_ID: $CURRENT_USER_ID
             GROUP_ID: $CURRENT_GROUP_ID
             PROJECT: ${CURRENT_PROJECT}
+            PYTHON_VER: ${PYTHON_VER}
     container_name: ${CURRENT_PROJECT}-devenv
     volumes:
         - "./:/workspace/${CURRENT_PROJECT}"
@@ -23,4 +24,5 @@ services:
             USER_NAME: $PROD_USER
             USER_ID: $CURRENT_USER_ID
             GROUP_ID: $CURRENT_GROUP_ID
+            PYTHON_VER: ${PYTHON_VER}
     container_name: ${CURRENT_PROJECT}-prodenv
