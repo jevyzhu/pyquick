@@ -72,7 +72,7 @@ run:
 		echo &&\
 		echo "============ Run In Docker ================" &&\
 		echo &&\
-		docker run ${PROD_IMG} $(ARGS) \
+		docker run --rm ${PROD_IMG} $(ARGS) \
 	;else \
 		python -m ${PROJECT}.main $(ARGS) \
 	;fi

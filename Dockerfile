@@ -1,4 +1,4 @@
-ARG PYTHON_VER=3.8
+ARG PYTHON_VER
 FROM python:${PYTHON_VER}-slim-buster
 
 ENV DEBIAN_FRONTEND=noninteractive
