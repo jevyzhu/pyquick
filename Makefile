@@ -1,9 +1,14 @@
 #!/usr/bin/make
 PROJECT := pyquick
-DEV_CONTAINER := ${PROJECT}-devenv
 DEV_USER := dev
+DEV_CONTAINER := ${PROJECT}-devenv
+DEV_SRV := ${PROJECT}-dev-env-srv 
+
 PROD_USER := ops
+PROD_SRV := ${PROJECT}-prod-env-srv 
 TAG := latest
+PROD_IMG := ${PROJECT}-prod:${TAG} 
+PYTHON := python3.8
 
 SHELL = /bin/bash
 
@@ -18,7 +23,7 @@ define dev-docker =
 	CURRENT_PROJECT=${PROJECT} \
 	DEV_USER=${DEV_USER} \
 	PROD_USER=${PROD_USER} \
-	docker-compose up -d --build ${PROJECT}-dev-env-srv
+	docker-compose up -d --build ${DEV_SRV}
 endef
 
 define prod-docker =
@@ -27,7 +32,7 @@ define prod-docker =
 	CURRENT_PROJECT=${PROJECT} \
 	DEV_USER=${DEV_USER} \
 	PROD_USER=${PROD_USER} \
-	docker-compose up -d --build ${PROJECT}-prod-env-srv
+	docker-compose up -d --build ${PROD_SRV}
 endef
 
 dist: clean test
@@ -59,7 +64,6 @@ test:
 
 run:
 	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
-		$(prod-docker) > /dev/null &&\
 		echo &&\
 		echo "============ Run In Docker ================" &&\
 		echo &&\
@@ -84,7 +88,7 @@ docker:
 	$(prod-docker)
 
 docker-slim:
-	docker-slim build  ${PROJECT}-prod:${TAG} --tag=${PROJECT}-prod:${TAG} --http-probe=false  --include-path=/usr/local/lib/python3.8
+	docker-slim build  ${PROD_IMG} --tag=${PROD_IMG} --http-probe=false  --include-path=/usr/local/lib/{PYTHON}
 
 
 clean:

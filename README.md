@@ -4,8 +4,8 @@
 > It 100% uses docker to do: development, test and build.
 
 # Prerequisition
-* docker
-* docker-compose
+* docker: ">= 17.06"
+* docker-compose: ">= 1.26"
 
 # Quick Start
 
@@ -16,7 +16,7 @@ make test
 ## Run
 ```bash
 make run
-make run ARGS="--version"
+make run ARGS="-h"
 ```
 ## Dist
 ```bash
