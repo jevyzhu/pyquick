@@ -1,6 +1,6 @@
 version: '3'
 services:
-  pyquick-dev-env-srv:
+  {{ project }}-dev-env-srv:
     image: ${CURRENT_PROJECT}-devenv:latest
     build:
         context: .
@@ -15,7 +15,7 @@ services:
     volumes:
         - "${PWD}:/workspace/${CURRENT_PROJECT}"
 
-  pyquick-prod-env-srv:
+  {{ project }}-prod-env-srv:
     image: ${CURRENT_PROJECT}-prod:latest
     build:
         context: .

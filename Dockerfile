@@ -3,10 +3,12 @@ FROM python:${PYTHON_VER}-slim-buster
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+
 RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
     && echo "Acquire::http::proxy \"$HTTP_PROXY\";" > /etc/apt/apt.conf \ 
     && echo "Acquire::https::proxy \"$HTTP_PROXY\";" >> /etc/apt/apt.conf \ 
-    && apt-get update && apt-get install -y sudo
+    && apt-get update && apt-get install -y sudo \
+    && pip install -U --upgrade pip
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
@@ -37,15 +39,13 @@ USER ${USER_NAME}
 
 # Install python packages
 COPY ./*.py /tmp/src/
+COPY ./MANIFEST.in /tmp/src/
 COPY ./requirements* /tmp/src/
+COPY ./*.md /tmp/src/
 COPY ./pyquick /tmp/src/pyquick
-COPY ./LICENSE /tmp/src/
-COPY ./README.md /tmp/src/
-RUN cd /tmp/src &&\ 
-    pip install -U --no-cache-dir -r /tmp/src/requirements.txt &&\
-    pip install -U --upgrade pip &&\
-    sudo python /tmp/src/setup.py install &&\
-    cd &&\
-    sudo rm -fr /tmp/src
+RUN cd /tmp/src \
+    && sudo -E python setup.py install \
+    && cd / \
+    && sudo rm -fr /tmp/src
 
 ENTRYPOINT ["pyquick"]

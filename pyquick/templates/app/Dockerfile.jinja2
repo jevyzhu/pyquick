@@ -1,15 +1,12 @@
 ARG PYTHON_VER
 FROM python:${PYTHON_VER}-slim-buster
-ENV IN_DEV_DOCKER=1
-
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
     && echo "Acquire::http::proxy \"$HTTP_PROXY\";" > /etc/apt/apt.conf \ 
     && echo "Acquire::https::proxy \"$HTTP_PROXY\";" >> /etc/apt/apt.conf \ 
-    && apt-get update && apt-get install -y sudo make bash-completion \
-    && pip install -U --upgrade pip
+    && apt-get update && apt-get install -y sudo
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
@@ -33,18 +30,20 @@ RUN if [ ! "${USER_NAME}" = "root" ] && [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:
     echo 'export PS1="\u@ \[\e[32m\]\w\[\e[m\]\[\e[35m\]\[\e[m\]\\n$ "' \
         >> /home/${USER_NAME}/.bashrc &&\
     echo $USER_NAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USER_NAME  &&\
-    chmod 0440 /etc/sudoers.d/$USER_NAME  \
+    chmod 0440 /etc/sudoers.d/$USER_NAME \
     #chown -R ${USER_ID}:${GROUP_ID} /  > /dev/null 2>&1 ||:  \
 ;fi
 USER ${USER_NAME}
-ARG PROJECT
-WORKDIR /workspace/${PROJECT}
-
-# Keep container live
-CMD tail -f
 
 # Install python packages
-ENV PATH=/home/${USER_NAME}/.local/bin:$PATH
-COPY ./requirements*.txt /tmp/
-RUN pip install -U --no-cache-dir -r /tmp/requirements-dev.txt &&\
-    sudo rm -fr /tmp/requirements*.txt
+COPY ./LICENSE /tmp/src/
+COPY ./README.md /tmp/src/
+COPY ./requirements* /tmp/src/
+COPY ./*.py /tmp/src/
+COPY ./{{project}} /tmp/src/{{project}}
+RUN cd /tmp/src &&\
+    sudo -E python setup.py install &&\
+    cd &&\
+    sudo rm -fr /tmp/src
+
+ENTRYPOINT ["{{project}}"]

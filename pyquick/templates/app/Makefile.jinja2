@@ -1,7 +1,8 @@
 #!/usr/bin/make
 
-PYTHON_VER := 3.8
-PROJECT := pyquick
+PYTHON_VER := {{ python_ver }}
+PROJECT := {{ project }}
+
 DEV_USER := dev
 DEV_CONTAINER := ${PROJECT}-devenv
 DEV_SRV := ${PROJECT}-dev-env-srv 

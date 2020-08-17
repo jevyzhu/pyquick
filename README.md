@@ -1,18 +1,15 @@
-# Python Quick start
+# Python Quick
 
-> This is a python app example. 
+> This is a python app/lib generator. 
 > It 100% uses docker to do: development, test and build.
 
-# Prerequisition
+# Usage
+
+# Source code
+## Prerequisition
 * docker: ">= 17.06"
 * docker-compose: ">= 1.26"
 
-# Quick Start
-
-## Test
-```bash
-make test
-```
 ## Run
 ```bash
 make run

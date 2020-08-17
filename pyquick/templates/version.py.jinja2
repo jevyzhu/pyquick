@@ -1,0 +1,7 @@
+from packaging.version import Version
+
+VERSION = {{version_as_tuple}}
+PROJECT = '{{project}}'
+
+def get_version():
+    return str(Version('.'.join([str(x) for x in VERSION])))
