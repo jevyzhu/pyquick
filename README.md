@@ -9,6 +9,9 @@
 
 ## Run in docker
 
+The docker image is pretty small - only 40+M.
+So it will not take much time for you to pull it.
+
 ```bash
 
 # pull docker image

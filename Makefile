@@ -103,7 +103,7 @@ docker:
 	$(prod-docker)
 
 docker-slim:
-	docker-slim build  ${PROD_IMG} --tag=${PROD_IMG_SLIM} --http-probe=false  --include-path=/usr/local/lib/python${PYTHON_VER}
+	echo -e "1\n" | docker-slim build  ${PROD_IMG} --tag=${PROD_IMG_SLIM} --http-probe=false  --include-path=/usr/local/lib/python${PYTHON_VER}
 
 
 clean:
