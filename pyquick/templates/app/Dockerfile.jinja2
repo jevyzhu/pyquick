@@ -37,9 +37,9 @@ USER ${USER_NAME}
 
 # Install python packages
 COPY ./LICENSE /tmp/src/
-COPY ./README.md /tmp/src/
-COPY ./requirements* /tmp/src/
+COPY ./*.md /tmp/src/
 COPY ./*.py /tmp/src/
+COPY ./requirements* /tmp/src/
 COPY ./{{project}} /tmp/src/{{project}}
 RUN cd /tmp/src \
     && sudo -E pip install packaging \

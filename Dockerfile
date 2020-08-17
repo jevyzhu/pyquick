@@ -42,6 +42,7 @@ COPY ./*.py /tmp/src/
 COPY ./MANIFEST.in /tmp/src/
 COPY ./requirements* /tmp/src/
 COPY ./*.md /tmp/src/
+COPY ./LICENSE /tmp/src/
 COPY ./pyquick /tmp/src/pyquick
 RUN cd /tmp/src \
     && sudo -E pip install packaging \
