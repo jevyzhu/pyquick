@@ -11,33 +11,39 @@
 
 ```bash
 
+# pull docker image
+
 docker pull jingweizhu/pyquick
 
-# generate a new python app
+# generate a new python app in local path: ./myproj
 
-docker run --rm -it -u $(id -u $USER):$(id -g $USER) -v <local dir>:/tmp/local jingweizhu/pyquick app /tmp/local/<dir name>
+docker run --rm -it -u $(id -u $USER):$(id -g $USER) \
+    -v ${PWD}:/tmp/local jingweizhu/pyquick \
+    app /tmp/local/myproj
 
 ```
 
 
-## Intall
+## Intall from PYPI
 
 ```bash
 
 pip install pyquick
 
-# generate a new python app
+# generate a new python app in ./myproj
 
-pyquick app <dir>
+pyquick app ./myproj
 
 ```
 
+
 # Source code
+
 ## Prerequisition
 * docker: ">= 17.06"
 * docker-compose: ">= 1.26"
 
-## Install
+## Install from code
 ```bash
 make install
 ```
