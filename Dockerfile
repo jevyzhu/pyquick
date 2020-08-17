@@ -44,6 +44,7 @@ COPY ./requirements* /tmp/src/
 COPY ./*.md /tmp/src/
 COPY ./pyquick /tmp/src/pyquick
 RUN cd /tmp/src \
+    && sudo -E pip install packaging \
     && sudo -E python setup.py install \
     && cd / \
     && sudo rm -fr /tmp/src

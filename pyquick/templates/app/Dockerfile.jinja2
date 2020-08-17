@@ -41,9 +41,10 @@ COPY ./README.md /tmp/src/
 COPY ./requirements* /tmp/src/
 COPY ./*.py /tmp/src/
 COPY ./{{project}} /tmp/src/{{project}}
-RUN cd /tmp/src &&\
-    sudo -E python setup.py install &&\
-    cd &&\
-    sudo rm -fr /tmp/src
+RUN cd /tmp/src \
+    && sudo -E pip install packaging \
+    && sudo -E python setup.py install \
+    && cd / \
+    && sudo rm -fr /tmp/src
 
 ENTRYPOINT ["{{project}}"]
