@@ -1,7 +1,7 @@
 # Python Quick
 
-> This is a python app/lib generator. 
-> It 100% uses docker to do: development, test and build.
+> This is a python app/lib generator that will generate python app/lib that 100% uses docker as base for development, test and build.
+> And, the tool itself 100% uses docker for development, test and build.
 
 
 # Usage
