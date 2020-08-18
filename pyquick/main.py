@@ -16,11 +16,19 @@ def is_int(s):
         return False
 
 
+vscode_ide_name = 'vscode'
+
+
 def arg_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--version',
                         action='version',
                         version=f'{PROJECT} {get_version()}')
+    parser.add_argument(
+        '-i',
+        '--ide',
+        choices=[vscode_ide_name],
+        default=vscode_ide_name)
     parser.add_argument('type', choices=['app', 'lib'])
     parser.add_argument('dir', type=str)
     return parser
@@ -38,6 +46,12 @@ def render(env, input_file, output_file_dir, **kwargs):
 
 def main():
     args = arg_parser().parse_args()
+
+    output_file_dir = pathlib.Path(args.dir)
+    if output_file_dir.exists() and len(list(output_file_dir.glob('**/*'))) != 0:
+        raise Exception(f'directory: {output_file_dir} is NOT EMPTY!')
+    output_file_dir.mkdir(parents=True, exist_ok=True)
+
     templates_path = pathlib.Path(__file__).parents[0].joinpath('templates')
     env = Environment(loader=FileSystemLoader(templates_path))
     env_path = templates_path.joinpath(args.type)
@@ -49,9 +63,6 @@ def main():
     default_github_url = 'https://github.com'
     default_version = '0.0.1'
 
-    output_file_dir = pathlib.Path(args.dir)
-    output_file_dir.mkdir(parents=True, exist_ok=True)
-
     project_ = input(f'Project name[{default_project}]:') or default_project
     author_ = input(f'author[{default_author}]:') or default_author
     author_mail_ = input(
@@ -62,6 +73,10 @@ def main():
         f'Python version[{default_python_ver}]:') or default_python_ver
     version_ = input(f'version[{default_version}]:') or default_version
     project_description_ = input('description[""]:') or ''
+
+    if args.ide == vscode_ide_name:
+        shutil.copytree(templates_path.joinpath(vscode_ide_name),
+                        output_file_dir.joinpath(f'.{vscode_ide_name}'))
 
     template_file_name = pathlib.Path('LICENSE.jinja2')
     now = datetime.datetime.now()

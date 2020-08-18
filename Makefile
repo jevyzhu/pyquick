@@ -90,7 +90,8 @@ run-slim:
 dist-upload:
 	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
 		$(dev-docker) > /dev/null &&\
-		docker exec -it ${DEV_CONTAINER}  \
+		docker exec -it \
+			${DEV_CONTAINER}  \
 			twine upload dist/* \
 	;else \
 		twine upload dist/* \
