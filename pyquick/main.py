@@ -78,6 +78,8 @@ def main():
         shutil.copytree(templates_path.joinpath(vscode_ide_name),
                         output_file_dir.joinpath(f'.{vscode_ide_name}'))
 
+    shutil.copy(templates_path.joinpath('gitignore'), output_file_dir.joinpath('.gitignore'))
+
     template_file_name = pathlib.Path('LICENSE.jinja2')
     now = datetime.datetime.now()
     render(env,
