@@ -37,6 +37,7 @@ USER ${USER_NAME}
 
 # Install python packages
 COPY ./LICENSE /tmp/src/
+COPY ./MANIFEST.in /tmp/src/
 COPY ./*.md /tmp/src/
 COPY ./*.py /tmp/src/
 COPY ./requirements* /tmp/src/

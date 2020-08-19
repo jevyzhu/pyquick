@@ -1,0 +1,19 @@
+version: '3'
+services:
+  {{ project }}-dev-env-srv:
+    image: ${CURRENT_PROJECT}-devenv:latest
+    build:
+        context: .
+        dockerfile: Dockerfile-dev
+        args:
+            USER_NAME: $DEV_USER
+            USER_ID: $CURRENT_USER_ID
+            GROUP_ID: $CURRENT_GROUP_ID
+            PROJECT: $CURRENT_PROJECT
+            PYTHON_VER: $PYTHON_VER
+    container_name: ${CURRENT_PROJECT}-devenv
+    environment:
+        - TWINE_USERNAME
+        - TWINE_PASSWORD
+    volumes:
+        - "${PWD}:/workspace/${CURRENT_PROJECT}"
