@@ -46,7 +46,7 @@ def generate_proj(templates_path: pathlib.Path,
     for f in templates_path.glob('requirements*.txt'):
         shutil.copy(f, output_file_dir)
 
-    type_path = pathlib.Path(proj_info.proj_type)
+    type_path = pathlib.Path(proj_info.proj_type+'.t')
     template_file_name = type_path.joinpath('Makefile.jinja2')
     render(env,
            template_file_name,
