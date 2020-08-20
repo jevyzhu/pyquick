@@ -3,7 +3,7 @@
 > This is a python app/lib generator that creates python app/lib. And the app/lib 100% uses docker as base for development, test and build.
 > Of course, this project itself 100% on docker :D
 
-![pyquick-demo](https://github.com/jevyzhu/pieterraform/pyquick.gif "pyquick-demo")
+![pyquick-demo](https://github.com/jevyzhu/pieterraform/pyquick-demo.gif "pyquick-demo")
 
 # Why PyQuick created?
 
