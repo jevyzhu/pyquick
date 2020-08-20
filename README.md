@@ -12,7 +12,7 @@
 ![pyquick-demo](https://raw.githubusercontent.com/jevyzhu/pyquick/master/pyquick-demo.gif "pyquick-demo")
 
 
-# Why PyQuick created?
+# Why PyQuick Created?
 
 ## Python's Pain Points
 
@@ -28,6 +28,8 @@
 * Dev/Pod environments keeo consistent - prefect for CI/CD.
 
 ## PyQuick Helps
+
+Though this is a super tiny python program but =>
 
 * It gengerates a **start-up python app/lib** for you with Dockerfiles, SetUp Tools, Makefiles, Requirements and others ready.
 * The project it generated is 100% **based on Docker**.
