@@ -63,7 +63,7 @@ docker run --rm -it -u $(id -u $USER):$(id -g $USER) \
 
 ```
 
-
+## ---- OR ---- 
 ## Intall From PyPi And Run It
 
 Note: **`python>=3.7`** required
