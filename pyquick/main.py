@@ -43,6 +43,9 @@ def generate_proj(templates_path: pathlib.Path,
            author=proj_info.author,
            year=proj_info.year)
 
+    shutil.copy(templates_path.joinpath('MANIFEST.in'),
+                output_file_dir.joinpath('MANIFEST.in'))
+
     for f in templates_path.glob('requirements*.txt'):
         shutil.copy(f, output_file_dir)
 

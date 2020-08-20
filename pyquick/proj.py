@@ -31,7 +31,7 @@ class ProjInfo:
         self.project = input(f'Project name[{self.project}]:') or self.project
         self.author = input(f'author[{self.author}]:') or self.author
         self.author_mail = input(
-            f'mail[{self.author_mail}]:') or self.author_mail
+            f'mail[{self.author}@outlook.com]:') or f'{self.author}@outlook.com'
         self.github_url = input(
             f'github url[{self.github_url}]:') or self.github_url
         self.python_ver = input(

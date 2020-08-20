@@ -1,6 +1,6 @@
 #!/usr/bin/make
 
-PYTHON_VER := 3.8
+PYTHON_VER := 3.7
 PROJECT := pyquick
 DEV_USER := dev
 DEV_CONTAINER := ${PROJECT}-devenv
@@ -122,4 +122,4 @@ autopep8:
 	;fi
 
 install: test
-	python setup.py install --user
+	python setup.py install --force --user 

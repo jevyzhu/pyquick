@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from pyquick.version import get_version, PROJECT
 import pkg_resources
 
-python_ver = "3.8"
+python_ver = "3.7"
 project = PROJECT
 
 with open("README.md", "r") as fh:
