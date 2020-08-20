@@ -141,6 +141,7 @@ make dist
 ls dist/*
 ```
 
+
 ## Use VSCode To Develop Generated Project 
 
 1. Start VSCode, install Remote extention.
@@ -151,6 +152,27 @@ ls dist/*
     ```
 4. Reload widdow. Then python extension and other cool extensions available.
 
+## And Even More ...
+
+### Format Codes Of Your Project
+
+```bash
+cd ./myproj
+make autopep8
+```
+### Distribute Your Project To PyPi
+
+1. Set up two envs:
+```bash
+TWINE_USERNAME=<your pypi username>
+TWINE_PASSWORD=<your pypi password>
+```
+
+2. Run 
+```bash
+cd ./myproj
+make dist-upload
+```
 
 # Source code
 
