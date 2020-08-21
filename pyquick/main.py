@@ -49,7 +49,7 @@ def generate_proj(templates_path: pathlib.Path,
     for f in templates_path.glob('requirements*.txt'):
         shutil.copy(f, output_file_dir)
 
-    type_path = pathlib.Path(proj_info.proj_type+'.t')
+    type_path = pathlib.Path(proj_info.proj_type + '.t')
     template_file_name = type_path.joinpath('Makefile.jinja2')
     render(env,
            template_file_name,
@@ -91,15 +91,11 @@ def generate_proj(templates_path: pathlib.Path,
     output_file_dir.mkdir(parents=True, exist_ok=True)
 
     template_file_name = pathlib.Path('version.py.jinja2')
-    ver_list = []
-    for value in proj_info.version.split('.'):
-        value = (int(value)) if is_int(value) else value
-        ver_list.append(value)
     render(env,
            template_file_name,
            output_file_dir,
            project=proj_info.project,
-           version_as_tuple=tuple(ver_list))
+           version=proj_info.version)
 
     init_file_name = '__init__.py'
     pathlib.Path(output_file_dir.joinpath(init_file_name)).touch()
