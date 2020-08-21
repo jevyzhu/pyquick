@@ -180,15 +180,23 @@ make dist-upload
 * docker: ">= 17.06"
 * docker-compose: ">= 1.26"
 
-## Install From Code
+## Run Test
 ```bash
-make install
+make test
 ```
 
 ## Run
 ```bash
-make run
+make docker
 make run ARGS="-h"
+
+# creat a new app in your $HOME/myproj
+make run ARGS="app /local/myproj"
+```
+
+## Install From Code
+```bash
+make install
 ```
 
 ## Dist

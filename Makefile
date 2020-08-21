@@ -72,7 +72,7 @@ run:
 		echo &&\
 		echo "============ Run In Docker ================" &&\
 		echo &&\
-		docker run --rm ${PROD_IMG} $(ARGS) \
+		docker run -it --rm -v ${HOME}:/local ${PROD_IMG} $(ARGS) \
 	;else \
 		python -m ${PROJECT}.main $(ARGS) \
 	;fi
@@ -82,7 +82,7 @@ run-slim:
 		echo &&\
 		echo "============ Run In Docker ================" &&\
 		echo &&\
-		docker run ${PROD_IMG_SLIM} $(ARGS) \
+		docker run -it --rm -v ${HOME}:/local ${PROD_IMG_SLIM} $(ARGS) \
 	;else \
 		python -m ${PROJECT}.main $(ARGS) \
 	;fi
