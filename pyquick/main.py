@@ -70,7 +70,6 @@ def generate_proj(templates_path: pathlib.Path,
            template_file_name,
            output_file_dir,
            project=proj_info.project,
-           version=proj_info.version,
            project_description=proj_info.project_description)
 
     template_file_name = pathlib.Path('Dockerfile-dev.jinja2')
