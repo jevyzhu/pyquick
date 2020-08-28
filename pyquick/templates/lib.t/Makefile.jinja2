@@ -80,5 +80,15 @@ autopep8:
 		autopep8 --in-place --recursive --aggressive . \
 	;fi
 
+black:
+	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
+		$(dev-docker) > /dev/null &&\
+		docker exec ${DEV_CONTAINER}  \
+		/bin/bash -c "black -q . " \
+	;else \
+		black -q . \
+	;fi
+
+
 install: test
 	python setup.py install --force --user

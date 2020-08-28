@@ -1,5 +1,5 @@
 ARG PYTHON_VER
-FROM python:${PYTHON_VER}-slim-buster
+wROM python:${PYTHON_VER}-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 

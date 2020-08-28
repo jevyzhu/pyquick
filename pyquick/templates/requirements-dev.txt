@@ -8,4 +8,5 @@ twine
 setuptools
 wheel
 autopep8
+black
 ptpython
