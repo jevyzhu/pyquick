@@ -12,14 +12,13 @@ PROD_SRV := ${PROJECT}-prod-env-srv
 
 TAG := latest
 PROD_IMG := ${PROJECT}-prod:${TAG} 
-PROD_IMG_SLIM := ${PROJECT}-prod-slim:${TAG} 
 
 SHELL = /bin/bash
 
 CURRENT_USER_ID := $(shell id -u ${USER}) 
 CURRENT_GROUP_ID := $(shell id -g ${USER}) 
 
-.PHONY: clean test dist dist-upload docker-dev docker docker-slim run run-slim autopep8 black install
+.PHONY: clean test dist dist-upload docker-dev docker run autopep8 black install
 
 define dev-docker =
 	env CURRENT_USER_ID=${CURRENT_USER_ID} \
@@ -78,16 +77,6 @@ run:
 		python -m ${PROJECT}.main $(ARGS) \
 	;fi
 
-run-slim:
-	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
-		echo &&\
-		echo "============ Run In Docker ================" &&\
-		echo &&\
-		docker run -it --rm -v ${HOME}:/local ${PROD_IMG_SLIM} $(ARGS) \
-	;else \
-		python -m ${PROJECT}.main $(ARGS) \
-	;fi
-
 dist-upload:
 	@if [[ -z "${IN_DEV_DOCKER}" ]]; then \
 		$(dev-docker) > /dev/null &&\
@@ -103,10 +92,6 @@ docker-dev:
 
 docker:
 	$(prod-docker)
-
-docker-slim:
-	echo "1\n" | docker-slim build  ${PROD_IMG} --tag=${PROD_IMG_SLIM} --http-probe=false  --include-path=/usr/local/lib/python${PYTHON_VER}
-
 
 clean:
 	@find . -name '*.py[co]' -delete
