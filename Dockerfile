@@ -1,13 +1,9 @@
 ARG PYTHON_VER
-wROM python:${PYTHON_VER}-slim
+FROM python:${PYTHON_VER}-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-
-RUN mkdir -p /etc/apt && touch /etc/apt/apt.conf \
-    && echo "Acquire::http::proxy \"$HTTP_PROXY\";" > /etc/apt/apt.conf \ 
-    && echo "Acquire::https::proxy \"$HTTP_PROXY\";" >> /etc/apt/apt.conf \ 
-    && apt-get update && apt-get install -y sudo \
+RUN apt-get update && apt-get install -y sudo \
     && pip install -U --upgrade pip
 
 # Switch back to dialog for any ad-hoc use of apt-get

@@ -40,9 +40,6 @@ USER ${USER_NAME}
 ARG PROJECT
 WORKDIR /workspace/${PROJECT}
 
-# Keep container live
-CMD tail -f
-
 # Install python packages
 ENV PATH=/home/${USER_NAME}/.local/bin:$PATH
 COPY ./requirements*.txt /tmp/

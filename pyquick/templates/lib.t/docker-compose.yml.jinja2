@@ -2,6 +2,8 @@ version: '3'
 services:
   {{ project }}-dev-env-srv:
     image: ${CURRENT_PROJECT}-devenv:latest
+    tty: true
+    network_mode: bridge
     build:
         context: .
         dockerfile: Dockerfile-dev

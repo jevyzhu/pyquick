@@ -2,6 +2,8 @@ version: '3'
 services:
   pyquick-dev-env-srv:
     image: ${CURRENT_PROJECT}-devenv:latest
+    tty: true
+    network_mode: bridge
     build:
         context: .
         dockerfile: Dockerfile-dev
@@ -20,6 +22,7 @@ services:
 
   pyquick-prod-env-srv:
     image: ${CURRENT_PROJECT}-prod:latest
+    network_mode: bridge
     build:
         context: .
         dockerfile: Dockerfile
