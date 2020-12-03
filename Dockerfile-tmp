@@ -1,5 +1,0 @@
-FROM quay.io/podman/stable
-RUN set -eux; adduser -m -u 1000 rootless; echo 'rootless:100000:65536' >> /etc/subuid; echo 'rootless:100000:65536' >> /etc/subgid
-RUN echo "rootless:rootless" |  chpasswd
-USER rootless
-
